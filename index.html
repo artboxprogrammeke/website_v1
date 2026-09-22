@@ -66,6 +66,16 @@
     font-size: 20px;
     color: var(--ink);
   }
+  .nav-links { display: flex; align-items: center; gap: 20px; }
+  .nav-link {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .nav-link:hover { color: var(--teal-deep); }
   .nav-cta {
     display: inline-block;
     font-family: 'Baloo 2', cursive;
@@ -414,6 +424,8 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 680px) {
     nav { padding: 12px 16px; }
+    .nav-link { display: none; }
+    .nav-cta { font-size: 13px; padding: 8px 14px; }
     .section { padding: 44px 16px; }
     .hero-content { padding: 52px 20px; }
     .story-grid { grid-template-columns: 1fr; }
@@ -434,11 +446,14 @@
 <div class="brandbar" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
 
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="." class="nav-logo">
     <img src="images/logo.jpg" alt="ArtBox logo">
     <span>ArtBox</span>
   </a>
-  <a href="sponsor.html" class="nav-cta">Sponsor an ArtBox →</a>
+  <div class="nav-links">
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="sponsor.html" class="nav-cta">Sponsor an ArtBox →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
