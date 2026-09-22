@@ -48,6 +48,9 @@ function doGet(e) {
 
 // ─── SPONSORSHIP ─────────────────────────────────────────────────────────────
 
+var NOTIFY_TO = "artboxprogramme@gmail.com";
+var NOTIFY_CC = "nimo.kanina@gmail.com";
+
 function handleSponsorship(d) {
   var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = getOrCreateSheet(ss, "Sponsorships", [
@@ -73,6 +76,39 @@ function handleSponsorship(d) {
     d.contactPhone || "",
     d.contactEmail || ""
   ]);
+
+  // Email notification
+  try {
+    var hasSchool = d.schoolName || d.schoolLocation || d.contactName;
+    var lines = [
+      "New ArtBox sponsorship received.",
+      "",
+      "Name:        " + (d.name || ""),
+      d.org ? "Organisation: " + d.org : null,
+      "Phone:       " + (d.phone || ""),
+      "Email:       " + (d.email || ""),
+      "",
+      "ArtBoxes:    " + (d.boxes || ""),
+      "Total paid:  KSh " + (d.total || ""),
+      "M-PESA code: " + (d.code || ""),
+      hasSchool ? "" : null,
+      hasSchool ? "── School preference ──────────────" : null,
+      d.schoolName     ? "School:          " + d.schoolName     : null,
+      d.schoolLocation ? "Location:        " + d.schoolLocation : null,
+      d.contactName    ? "Contact:         " + d.contactName + (d.contactRole ? " (" + d.contactRole + ")" : "") : null,
+      d.contactPhone   ? "Contact phone:   " + d.contactPhone   : null,
+      d.contactEmail   ? "Contact email:   " + d.contactEmail   : null
+    ].filter(function(l) { return l !== null; }).join("\n");
+
+    MailApp.sendEmail({
+      to:      NOTIFY_TO,
+      cc:      NOTIFY_CC,
+      subject: "ArtBox Sponsorship — " + (d.name || "unknown") + " (" + (d.boxes || "?") + " box)",
+      body:    lines
+    });
+  } catch (mailErr) {
+    // Don't fail the whole submission if email errors
+  }
 
   return jsonResponse({ ok: true });
 }
