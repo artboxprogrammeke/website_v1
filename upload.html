@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload artwork — ArtBox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E85D4A;
+    --red-deep:#D64A37;
+    --teal:#3BAFC0;
+    --teal-deep:#2E96A6;
+    --gold:#C99A3C;
+    --orange:#F0924C;
+    --green:#3E9E5C;
+    --ink:#2E2A26;
+    --muted:#7A736B;
+    --cream:#FAF5EC;
+    --card:#FFFFFF;
+    --tint-red:#FCEBE7;
+    --tint-teal:#E6F4F6;
+    --tint-gold:#F9F1DE;
+    --tint-orange:#FCEFE2;
+    --tint-green:#E8F5EC;
+    --line:#EFE7DA;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.55;
+    padding:16px 14px 48px;
+    font-size:16px;
+  }
+  .sheet{
+    max-width:700px;
+    margin:0 auto;
+    background:var(--card);
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 10px 40px rgba(70,50,30,.10);
+  }
+  .brandbar{display:flex;height:8px}
+  .brandbar span{flex:1}
+  .brandbar .b1{background:var(--red)}
+  .brandbar .b2{background:var(--orange)}
+  .brandbar .b3{background:var(--gold)}
+  .brandbar .b4{background:var(--teal)}
+
+  .inner{padding:28px 22px 30px}
+  @media(min-width:480px){.inner{padding:34px 32px 36px}}
+
+  .logo{display:flex;align-items:center;gap:12px;margin-bottom:18px;text-decoration:none;color:inherit;width:fit-content}
+  .logo:hover img{opacity:.85}
+  .logo img{width:58px;height:58px;object-fit:contain}
+  .logo .tag{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;line-height:1.3}
+
+  .badge{
+    display:inline-block;
+    font-family:'Baloo 2',cursive;font-weight:700;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    color:#fff;background:var(--gold);
+    padding:6px 14px;border-radius:8px;
+    transform:rotate(-1.5deg);
+    margin-bottom:12px;
+  }
+  h1{
+    font-family:'Baloo 2',cursive;font-weight:800;
+    font-size:clamp(24px,6vw,32px);line-height:1.12;
+    margin-bottom:8px;
+  }
+  h1 em{font-style:normal;color:var(--red)}
+  .lede{color:var(--muted);font-size:15px;margin-bottom:26px}
+  .lede strong{color:var(--ink)}
+
+  section{margin-bottom:20px}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .step{
+    width:30px;height:30px;flex:none;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;color:#fff;
+  }
+  h2{font-family:'Baloo 2',cursive;font-weight:700;font-size:19px}
+  .s1 .step{background:var(--teal)}
+  .s2 .step{background:var(--red)}
+  .s3 .step{background:var(--gold)}
+
+  label{display:block;font-weight:800;font-size:13.5px;margin:10px 0 5px}
+  label .opt{font-weight:600;color:var(--muted)}
+  input[type=text],input[type=email],input[type=tel],input[type=number],textarea{
+    width:100%;
+    font:inherit;font-size:16px;
+    padding:12px 14px;
+    border:2px solid var(--line);
+    border-radius:12px;
+    background:#FFFDF9;
+    color:var(--ink);
+    transition:border-color .15s;
+    -webkit-appearance:none;
+  }
+  input:focus,textarea:focus{outline:none;border-color:var(--teal)}
+  input.invalid{border-color:var(--red)}
+  textarea.invalid{border-color:var(--red)}
+  textarea{resize:vertical;min-height:74px}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .err{display:none;font-size:12.5px;color:var(--red-deep);font-weight:700;margin-top:4px}
+  .err.show{display:block}
+
+  /* Entry blocks */
+  .entry-block{
+    background:var(--tint-teal);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:14px;
+  }
+  .entry-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .entry-label{
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;color:var(--ink);
+  }
+  .remove-btn{
+    background:none;border:none;color:var(--muted);
+    font-size:12px;cursor:pointer;font-family:inherit;
+    padding:4px 0;line-height:1;
+  }
+  .remove-btn:hover{color:var(--red-deep)}
+
+  /* Upload zone */
+  .upload-zone{
+    display:block;width:100%;
+    padding:16px 14px;
+    border:2px dashed var(--teal);
+    border-radius:12px;
+    background:#fff;
+    text-align:center;
+    font-size:14px;color:var(--teal-deep);font-weight:700;
+    cursor:pointer;margin-top:6px;
+    transition:background .15s,border-color .15s;
+    min-height:52px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .upload-zone:hover{background:var(--tint-teal)}
+  .upload-zone.invalid{border-color:var(--red)}
+  .upload-zone input[type=file]{display:none}
+  .thumb{
+    display:none;width:100%;max-height:200px;
+    object-fit:cover;border-radius:12px;margin-top:10px;
+    border:2px solid var(--line);
+  }
+  .slot-status{font-size:13px;font-weight:700;margin-top:6px;min-height:18px}
+
+  .btn-add{
+    display:block;width:100%;
+    padding:13px;
+    border:2px solid var(--teal);border-radius:14px;
+    background:none;color:var(--teal-deep);
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:16px;
+    cursor:pointer;margin-top:4px;
+    transition:background .15s;
+  }
+  .btn-add:hover{background:var(--tint-teal)}
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;border:none;border-radius:16px;
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:18px;
+    padding:15px 18px;cursor:pointer;color:#fff;
+    transition:transform .1s, filter .15s;
+    margin-top:6px;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .btn-check{background:var(--red)}
+  .btn-check:hover{filter:brightness(1.05)}
+  .btn-check[disabled]{opacity:.6;cursor:wait}
+
+  .form-err{
+    display:none;text-align:center;font-weight:800;color:var(--red-deep);
+    font-size:14px;margin-top:10px;
+  }
+  .form-err.show{display:block}
+
+  .success{
+    display:none;
+    background:var(--tint-green);
+    border-radius:var(--radius);
+    padding:28px 22px;text-align:center;
+  }
+  .success.show{display:block}
+  .success h3{
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;
+    color:var(--green);margin-bottom:10px;
+  }
+  .success p{font-size:14.5px;margin-bottom:6px}
+  .success b{font-weight:800}
+  .success a{color:var(--green);font-weight:800}
+
+  .foot{
+    text-align:center;font-size:13px;color:var(--muted);
+    margin-top:26px;padding-top:18px;border-top:2px dashed var(--line);
+  }
+  .foot b{color:var(--ink)}
+  .foot .thanks{font-family:'Baloo 2',cursive;font-weight:700;font-size:16px;color:var(--ink);display:block;margin-bottom:6px}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="brandbar" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
+  <div class="inner">
+
+    <a class="logo" href=".">
+      <img src="images/logo.jpg" alt="ArtBox logo">
+      <div class="tag">A school<br>art programme</div>
+    </a>
+
+    <div id="form-area">
+      <span class="badge">Share your children's work</span>
+      <h1>Upload artwork <em>from your class</em></h1>
+      <p class="lede">Fill in the form below and add up to five pieces of artwork. Each photo goes straight into the ArtBox gallery.</p>
+
+      <!-- 1 · School details -->
+      <section class="s1">
+        <div class="sec-head"><span class="step">1</span><h2>School details</h2></div>
+        <label for="f-school">School or institution name</label>
+        <input type="text" id="f-school" autocomplete="organization">
+        <p class="err" id="e-school">Please add your school or institution name.</p>
+      </section>
+
+      <!-- 2 · Submitted by -->
+      <section class="s2">
+        <div class="sec-head"><span class="step">2</span><h2>Submitted by</h2></div>
+        <label for="f-sub-name">Your name</label>
+        <input type="text" id="f-sub-name" autocomplete="name">
+        <p class="err" id="e-sub-name">Please add your name.</p>
+
+        <label for="f-sub-pos">Your position</label>
+        <input type="text" id="f-sub-pos" placeholder="e.g. Art Teacher, Head Teacher">
+        <p class="err" id="e-sub-pos">Please add your position.</p>
+      </section>
+
+      <!-- 3 · Artwork entries -->
+      <section class="s3">
+        <div class="sec-head"><span class="step">3</span><h2>Children's artwork</h2></div>
+        <p class="hint" style="margin-bottom:14px">Add at least one entry. You can add up to five.</p>
+
+        <!-- Entry 1 -->
+        <div class="entry-block" id="entry-1">
+          <div class="entry-header">
+            <span class="entry-label">Entry 1</span>
+          </div>
+          <label for="f-name-1">Child's first name</label>
+          <input type="text" id="f-name-1">
+          <p class="err" id="e-name-1">Please add the child's first name.</p>
+
+          <label for="f-age-1">Age</label>
+          <input type="number" id="f-age-1" min="3" max="18" inputmode="numeric">
+          <p class="err" id="e-age-1">Please add the child's age (3–18).</p>
+
+          <label for="f-desc-1">About this artwork</label>
+          <textarea id="f-desc-1" placeholder="Tell us a little about this child and what they made."></textarea>
+          <p class="err" id="e-desc-1">Please add a short description.</p>
+
+          <label>Photo</label>
+          <label class="upload-zone" id="zone-1" for="f-photo-1">
+            <input type="file" id="f-photo-1" accept="image/*" capture="environment">
+            <span id="zone-label-1">Tap to choose or take a photo</span>
+          </label>
+          <p class="err" id="e-photo-1">Please add a photo.</p>
+          <img class="thumb" id="thumb-1" alt="">
+          <p class="slot-status" id="status-1"></p>
+        </div>
+
+        <!-- Entry 2 -->
+        <div class="entry-block" id="entry-2" style="display:none">
+          <div class="entry-header">
+            <span class="entry-label">Entry 2</span>
+            <button type="button" class="remove-btn" data-slot="2">Remove</button>
+          </div>
+          <label for="f-name-2">Child's first name</label>
+          <input type="text" id="f-name-2">
+          <p class="err" id="e-name-2">Please add the child's first name.</p>
+
+          <label for="f-age-2">Age</label>
+          <input type="number" id="f-age-2" min="3" max="18" inputmode="numeric">
+          <p class="err" id="e-age-2">Please add the child's age (3–18).</p>
+
+          <label for="f-desc-2">About this artwork</label>
+          <textarea id="f-desc-2" placeholder="Tell us a little about this child and what they made."></textarea>
+          <p class="err" id="e-desc-2">Please add a short description.</p>
+
+          <label>Photo</label>
+          <label class="upload-zone" id="zone-2" for="f-photo-2">
+            <input type="file" id="f-photo-2" accept="image/*" capture="environment">
+            <span id="zone-label-2">Tap to choose or take a photo</span>
+          </label>
+          <p class="err" id="e-photo-2">Please add a photo.</p>
+          <img class="thumb" id="thumb-2" alt="">
+          <p class="slot-status" id="status-2"></p>
+        </div>
+
+        <!-- Entry 3 -->
+        <div class="entry-block" id="entry-3" style="display:none">
+          <div class="entry-header">
+            <span class="entry-label">Entry 3</span>
+            <button type="button" class="remove-btn" data-slot="3">Remove</button>
+          </div>
+          <label for="f-name-3">Child's first name</label>
+          <input type="text" id="f-name-3">
+          <p class="err" id="e-name-3">Please add the child's first name.</p>
+
+          <label for="f-age-3">Age</label>
+          <input type="number" id="f-age-3" min="3" max="18" inputmode="numeric">
+          <p class="err" id="e-age-3">Please add the child's age (3–18).</p>
+
+          <label for="f-desc-3">About this artwork</label>
+          <textarea id="f-desc-3" placeholder="Tell us a little about this child and what they made."></textarea>
+          <p class="err" id="e-desc-3">Please add a short description.</p>
+
+          <label>Photo</label>
+          <label class="upload-zone" id="zone-3" for="f-photo-3">
+            <input type="file" id="f-photo-3" accept="image/*" capture="environment">
+            <span id="zone-label-3">Tap to choose or take a photo</span>
+          </label>
+          <p class="err" id="e-photo-3">Please add a photo.</p>
+          <img class="thumb" id="thumb-3" alt="">
+          <p class="slot-status" id="status-3"></p>
+        </div>
+
+        <!-- Entry 4 -->
+        <div class="entry-block" id="entry-4" style="display:none">
+          <div class="entry-header">
+            <span class="entry-label">Entry 4</span>
+            <button type="button" class="remove-btn" data-slot="4">Remove</button>
+          </div>
+          <label for="f-name-4">Child's first name</label>
+          <input type="text" id="f-name-4">
+          <p class="err" id="e-name-4">Please add the child's first name.</p>
+
+          <label for="f-age-4">Age</label>
+          <input type="number" id="f-age-4" min="3" max="18" inputmode="numeric">
+          <p class="err" id="e-age-4">Please add the child's age (3–18).</p>
+
+          <label for="f-desc-4">About this artwork</label>
+          <textarea id="f-desc-4" placeholder="Tell us a little about this child and what they made."></textarea>
+          <p class="err" id="e-desc-4">Please add a short description.</p>
+
+          <label>Photo</label>
+          <label class="upload-zone" id="zone-4" for="f-photo-4">
+            <input type="file" id="f-photo-4" accept="image/*" capture="environment">
+            <span id="zone-label-4">Tap to choose or take a photo</span>
+          </label>
+          <p class="err" id="e-photo-4">Please add a photo.</p>
+          <img class="thumb" id="thumb-4" alt="">
+          <p class="slot-status" id="status-4"></p>
+        </div>
+
+        <!-- Entry 5 -->
+        <div class="entry-block" id="entry-5" style="display:none">
+          <div class="entry-header">
+            <span class="entry-label">Entry 5</span>
+            <button type="button" class="remove-btn" data-slot="5">Remove</button>
+          </div>
+          <label for="f-name-5">Child's first name</label>
+          <input type="text" id="f-name-5">
+          <p class="err" id="e-name-5">Please add the child's first name.</p>
+
+          <label for="f-age-5">Age</label>
+          <input type="number" id="f-age-5" min="3" max="18" inputmode="numeric">
+          <p class="err" id="e-age-5">Please add the child's age (3–18).</p>
+
+          <label for="f-desc-5">About this artwork</label>
+          <textarea id="f-desc-5" placeholder="Tell us a little about this child and what they made."></textarea>
+          <p class="err" id="e-desc-5">Please add a short description.</p>
+
+          <label>Photo</label>
+          <label class="upload-zone" id="zone-5" for="f-photo-5">
+            <input type="file" id="f-photo-5" accept="image/*" capture="environment">
+            <span id="zone-label-5">Tap to choose or take a photo</span>
+          </label>
+          <p class="err" id="e-photo-5">Please add a photo.</p>
+          <img class="thumb" id="thumb-5" alt="">
+          <p class="slot-status" id="status-5"></p>
+        </div>
+
+        <button type="button" class="btn-add" id="add-btn">+ Add another entry</button>
+      </section>
+
+      <button type="button" class="btn btn-check" id="submit-btn">Submit artwork</button>
+      <p class="form-err" id="form-err">A few details are missing — check the highlighted fields above.</p>
+    </div>
+
+    <div class="success" id="success" role="status">
+      <h3>Thank you!</h3>
+      <p>The artwork from <b id="ok-school"></b> has been added to the ArtBox gallery.</p>
+      <p style="margin-top:10px"><a href="gallery.html">View the gallery</a></p>
+    </div>
+
+    <p class="foot">
+      <span class="thanks">Every ArtBox gives 50 young people the chance to create.</span>
+      <b>Jeremy — ArtBox</b> · <a href="mailto:artboxprogramme@gmail.com" style="color:inherit">artboxprogramme@gmail.com</a><br>
+      <b>Nimo Kanina</b> · <a href="mailto:nimo.kanina@gmail.com" style="color:inherit">nimo.kanina@gmail.com</a> · +254 714 435 756
+    </p>
+  </div>
+  <div class="brandbar" aria-hidden="true"><span class="b4"></span><span class="b3"></span><span class="b2"></span><span class="b1"></span></div>
+</div>
+
+<script>
+(function () {
+  var SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7ZcwFnYzz5TA3tBMYfx0_27sdkEFj8KQAOBVlb8pmbDQTlnqAJmJj2kRtj-eVXeOc/exec";
+  var MAX_SLOTS = 5;
+  var visibleSlots = 1;
+  var compressedFiles = {};   // { slotIndex: File }
+  var thumbObjectURLs = {};   // track for cleanup
+
+  // ── Image compression ─────────────────────────────────────────────────────
+  function compressImage(file) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        var MAX = 1800;
+        var w = img.naturalWidth, h = img.naturalHeight;
+        if (w > MAX || h > MAX) {
+          if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+          else        { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        canvas.toBlob(function (blob) {
+          if (!blob) { reject(new Error("compression-failed")); return; }
+          if (blob.size > 10 * 1024 * 1024) { reject(new Error("too-large")); return; }
+          resolve(new File([blob], "photo.jpg", { type: "image/jpeg" }));
+        }, "image/jpeg", 0.8);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("load-failed")); };
+      img.src = url;
+    });
+  }
+
+  // ── File input change handler ─────────────────────────────────────────────
+  function bindPhotoInput(i) {
+    var input  = document.getElementById("f-photo-" + i);
+    var thumb  = document.getElementById("thumb-" + i);
+    var status = document.getElementById("status-" + i);
+    var zone   = document.getElementById("zone-" + i);
+    var label  = document.getElementById("zone-label-" + i);
+    var errEl  = document.getElementById("e-photo-" + i);
+
+    input.addEventListener("change", function () {
+      var file = input.files[0];
+      if (!file) return;
+
+      // Clear previous state
+      delete compressedFiles[i];
+      errEl.classList.remove("show");
+      zone.classList.remove("invalid");
+      setStatus(i, "");
+
+      // Show raw preview immediately (responsive UX on slow connections)
+      if (thumbObjectURLs[i]) URL.revokeObjectURL(thumbObjectURLs[i]);
+      var previewURL = URL.createObjectURL(file);
+      thumbObjectURLs[i] = previewURL;
+      thumb.src = previewURL;
+      thumb.style.display = "block";
+      label.textContent = file.name;
+
+      setStatus(i, "Processing…");
+      compressImage(file).then(function (compressed) {
+        compressedFiles[i] = compressed;
+        setStatus(i, "");
+      }).catch(function (err) {
+        thumb.style.display = "none";
+        thumb.src = "";
+        label.textContent = "Tap to choose or take a photo";
+        input.value = "";
+        delete compressedFiles[i];
+        if (err.message === "too-large") {
+          setStatus(i, "This photo is too large — please choose a smaller image.", "error");
+        } else {
+          setStatus(i, "Could not process this photo. Please try another.", "error");
+        }
+      });
+    });
+  }
+
+  function setStatus(i, msg, type) {
+    var el = document.getElementById("status-" + i);
+    el.textContent = msg;
+    el.style.color = type === "error" ? "var(--red-deep)"
+                   : type === "ok"    ? "var(--green)"
+                   : "var(--muted)";
+  }
+
+  // ── Show/hide slots ───────────────────────────────────────────────────────
+  function updateAddBtn() {
+    document.getElementById("add-btn").style.display =
+      visibleSlots >= MAX_SLOTS ? "none" : "block";
+  }
+
+  document.getElementById("add-btn").addEventListener("click", function () {
+    if (visibleSlots >= MAX_SLOTS) return;
+    visibleSlots++;
+    document.getElementById("entry-" + visibleSlots).style.display = "block";
+    updateAddBtn();
+  });
+
+  // Remove buttons
+  for (var s = 2; s <= MAX_SLOTS; s++) {
+    (function (slot) {
+      var btn = document.querySelector(".remove-btn[data-slot='" + slot + "']");
+      if (btn) btn.addEventListener("click", function () {
+        document.getElementById("entry-" + slot).style.display = "none";
+        // Clear that slot's data
+        document.getElementById("f-name-" + slot).value = "";
+        document.getElementById("f-age-" + slot).value = "";
+        document.getElementById("f-desc-" + slot).value = "";
+        document.getElementById("f-photo-" + slot).value = "";
+        document.getElementById("thumb-" + slot).style.display = "none";
+        delete compressedFiles[slot];
+        setStatus(slot, "");
+        // Compact: shift down so there are no gaps
+        for (var j = slot; j < visibleSlots; j++) {
+          copySlotData(j + 1, j);
+        }
+        document.getElementById("entry-" + visibleSlots).style.display = "none";
+        clearSlot(visibleSlots);
+        visibleSlots--;
+        updateAddBtn();
+      });
+    })(s);
+  }
+
+  function copySlotData(from, to) {
+    document.getElementById("f-name-" + to).value  = document.getElementById("f-name-" + from).value;
+    document.getElementById("f-age-" + to).value   = document.getElementById("f-age-" + from).value;
+    document.getElementById("f-desc-" + to).value  = document.getElementById("f-desc-" + from).value;
+    var thumbFrom = document.getElementById("thumb-" + from);
+    var thumbTo   = document.getElementById("thumb-" + to);
+    thumbTo.src   = thumbFrom.src;
+    thumbTo.style.display = thumbFrom.style.display;
+    if (compressedFiles[from]) {
+      compressedFiles[to] = compressedFiles[from];
+    } else {
+      delete compressedFiles[to];
+    }
+    document.getElementById("zone-label-" + to).textContent =
+      document.getElementById("zone-label-" + from).textContent;
+  }
+
+  function clearSlot(slot) {
+    document.getElementById("f-name-" + slot).value  = "";
+    document.getElementById("f-age-" + slot).value   = "";
+    document.getElementById("f-desc-" + slot).value  = "";
+    document.getElementById("f-photo-" + slot).value = "";
+    document.getElementById("thumb-" + slot).style.display = "none";
+    document.getElementById("thumb-" + slot).src = "";
+    document.getElementById("zone-label-" + slot).textContent = "Tap to choose or take a photo";
+    delete compressedFiles[slot];
+    setStatus(slot, "");
+    ["e-name-","e-age-","e-desc-","e-photo-"].forEach(function(p){
+      var el = document.getElementById(p + slot);
+      if (el) { el.classList.remove("show"); }
+    });
+    ["f-name-","f-age-","f-desc-"].forEach(function(p){
+      var el = document.getElementById(p + slot);
+      if (el) { el.classList.remove("invalid"); }
+    });
+    document.getElementById("zone-" + slot).classList.remove("invalid");
+  }
+
+  // Bind all photo inputs
+  for (var k = 1; k <= MAX_SLOTS; k++) { bindPhotoInput(k); }
+  updateAddBtn();
+
+  // ── Validation ────────────────────────────────────────────────────────────
+  function setErr(inputId, errId, bad) {
+    var input = document.getElementById(inputId);
+    var err   = document.getElementById(errId);
+    if (input)  input.classList.toggle("invalid", bad);
+    if (err)    err.classList.toggle("show", bad);
+    return !bad;
+  }
+
+  function setZoneErr(zoneId, errId, bad) {
+    var zone = document.getElementById(zoneId);
+    var err  = document.getElementById(errId);
+    if (zone) zone.classList.toggle("invalid", bad);
+    if (err)  err.classList.toggle("show", bad);
+    return !bad;
+  }
+
+  function validate() {
+    var ok = true;
+    ok = setErr("f-school",   "e-school",   document.getElementById("f-school").value.trim().length < 2) && ok;
+    ok = setErr("f-sub-name", "e-sub-name", document.getElementById("f-sub-name").value.trim().length < 2) && ok;
+    ok = setErr("f-sub-pos",  "e-sub-pos",  document.getElementById("f-sub-pos").value.trim().length < 1) && ok;
+
+    for (var i = 1; i <= visibleSlots; i++) {
+      var age = parseInt(document.getElementById("f-age-" + i).value, 10);
+      ok = setErr("f-name-" + i, "e-name-" + i, document.getElementById("f-name-" + i).value.trim().length < 1) && ok;
+      ok = setErr("f-age-"  + i, "e-age-"  + i, isNaN(age) || age < 3 || age > 18) && ok;
+      ok = setErr("f-desc-" + i, "e-desc-" + i, document.getElementById("f-desc-" + i).value.trim().length < 5) && ok;
+      ok = setZoneErr("zone-" + i, "e-photo-" + i, !compressedFiles[i]) && ok;
+    }
+    return ok;
+  }
+
+  // ── Submission ────────────────────────────────────────────────────────────
+  function toBase64(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload  = function () {
+        // reader.result is data:image/jpeg;base64,XXXX — strip the prefix
+        var b64 = reader.result.split(",")[1];
+        resolve(b64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById("submit-btn").addEventListener("click", function () {
+    var btn     = this;
+    var formErr = document.getElementById("form-err");
+
+    if (!validate()) {
+      formErr.classList.add("show");
+      var firstBad = document.querySelector("input.invalid, textarea.invalid, .upload-zone.invalid");
+      if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    formErr.classList.remove("show");
+
+    var school       = document.getElementById("f-school").value.trim();
+    var submitterName = document.getElementById("f-sub-name").value.trim();
+    var submitterPos  = document.getElementById("f-sub-pos").value.trim();
+
+    btn.disabled    = true;
+    btn.textContent = "Uploading…";
+
+    var uploads = [];
+    for (var i = 1; i <= visibleSlots; i++) {
+      uploads.push(i);
+    }
+
+    var failed = false;
+
+    function uploadSlot(idx) {
+      setStatus(idx, "Uploading…", "");
+      var childName = document.getElementById("f-name-" + idx).value.trim();
+      var childAge  = document.getElementById("f-age-" + idx).value.trim();
+      var childDesc = document.getElementById("f-desc-" + idx).value.trim();
+
+      return toBase64(compressedFiles[idx]).then(function (b64) {
+        var payload = {
+          meta: JSON.stringify({
+            formType:     "gallery",
+            school:       school,
+            submitterName: submitterName,
+            submitterPos:  submitterPos,
+            childName:    childName,
+            childAge:     childAge,
+            childDesc:    childDesc
+          }),
+          photo: b64
+        };
+
+        // URLSearchParams sends as application/x-www-form-urlencoded
+        // Apps Script reads e.parameters for this content type
+        var body = new URLSearchParams(payload).toString();
+
+        return fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body
+        });
+      }).then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        if (json && json.ok) {
+          setStatus(idx, "Saved", "ok");
+        } else {
+          setStatus(idx, "Upload failed: " + (json && json.error ? json.error : "unknown error"), "error");
+          failed = true;
+        }
+      }).catch(function (err) {
+        setStatus(idx, "Could not reach the server. Check your connection and try again.", "error");
+        failed = true;
+      });
+    }
+
+    // Upload sequentially to avoid overwhelming a slow connection
+    var chain = Promise.resolve();
+    uploads.forEach(function (idx) {
+      chain = chain.then(function () { return uploadSlot(idx); });
+    });
+
+    chain.then(function () {
+      if (failed) {
+        btn.disabled    = false;
+        btn.textContent = "Try again";
+        formErr.textContent = "One or more photos could not be uploaded — see the status above each entry.";
+        formErr.classList.add("show");
+      } else {
+        document.getElementById("ok-school").textContent = school;
+        document.getElementById("form-area").style.display = "none";
+        document.getElementById("success").classList.add("show");
+        document.getElementById("success").scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
