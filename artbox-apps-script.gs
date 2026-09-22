@@ -100,12 +100,42 @@ function handleSponsorship(d) {
       d.contactEmail   ? "Contact email:   " + d.contactEmail   : null
     ].filter(function(l) { return l !== null; }).join("\n");
 
+    // Notify ArtBox team
     MailApp.sendEmail({
       to:      NOTIFY_TO,
       cc:      NOTIFY_CC,
       subject: "ArtBox Sponsorship — " + (d.name || "unknown") + " (" + (d.boxes || "?") + " box)",
       body:    lines
     });
+
+    // Confirmation to sponsor
+    if (d.email) {
+      var boxWord   = d.boxes == 1 ? "ArtBox" : "ArtBoxes";
+      var confirmed = [
+        "Hi " + (d.name || "there") + ",",
+        "",
+        "Thank you for sponsoring " + (d.boxes || "an") + " " + boxWord + "! Your support gives " + ((d.boxes || 1) * 50) + " children a full term of art.",
+        "",
+        "Here's a summary of your sponsorship:",
+        "",
+        "  ArtBoxes:    " + (d.boxes || ""),
+        "  Total paid:  KSh " + (d.total || ""),
+        "  M-PESA code: " + (d.code || ""),
+        d.schoolName ? "  School:       " + d.schoolName : null,
+        "",
+        "We'll confirm your M-PESA payment shortly. If you named a school, we'll be in touch to coordinate delivery.",
+        "",
+        "With thanks,",
+        "Jeremy & Nimo",
+        "ArtBox — artboxprogramme@gmail.com"
+      ].filter(function(l) { return l !== null; }).join("\n");
+
+      MailApp.sendEmail({
+        to:      d.email,
+        subject: "Your ArtBox sponsorship — thank you!",
+        body:    confirmed
+      });
+    }
   } catch (mailErr) {
     // Don't fail the whole submission if email errors
   }
