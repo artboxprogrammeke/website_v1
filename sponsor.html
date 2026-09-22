@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sponsor an ArtBox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E85D4A;
+    --red-deep:#D64A37;
+    --teal:#3BAFC0;
+    --teal-deep:#2E96A6;
+    --gold:#C99A3C;
+    --orange:#F0924C;
+    --green:#3E9E5C;
+    --ink:#2E2A26;
+    --muted:#7A736B;
+    --cream:#FAF5EC;
+    --card:#FFFFFF;
+    --tint-red:#FCEBE7;
+    --tint-teal:#E6F4F6;
+    --tint-gold:#F9F1DE;
+    --tint-orange:#FCEFE2;
+    --tint-green:#E8F5EC;
+    --line:#EFE7DA;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.55;
+    padding:16px 14px 48px;
+    font-size:16px;
+  }
+  .sheet{
+    max-width:560px;
+    margin:0 auto;
+    background:var(--card);
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 10px 40px rgba(70,50,30,.10);
+  }
+  .brandbar{display:flex;height:8px}
+  .brandbar span{flex:1}
+  .brandbar .b1{background:var(--red)}
+  .brandbar .b2{background:var(--orange)}
+  .brandbar .b3{background:var(--gold)}
+  .brandbar .b4{background:var(--teal)}
+
+  .inner{padding:28px 22px 30px}
+  @media(min-width:480px){.inner{padding:34px 32px 36px}}
+
+  .logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo img{width:58px;height:58px;object-fit:contain}
+  .logo .tag{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;line-height:1.3}
+
+  .badge{
+    display:inline-block;
+    font-family:'Baloo 2',cursive;font-weight:700;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    color:#fff;background:var(--gold);
+    padding:6px 14px;border-radius:8px;
+    transform:rotate(-1.5deg);
+    margin-bottom:12px;
+  }
+  h1{
+    font-family:'Baloo 2',cursive;font-weight:800;
+    font-size:clamp(24px,6vw,32px);line-height:1.12;
+    margin-bottom:8px;
+  }
+  h1 em{font-style:normal;color:var(--red)}
+  .lede{color:var(--muted);font-size:15px;margin-bottom:26px}
+  .lede strong{color:var(--ink)}
+
+  section{margin-bottom:26px}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .step{
+    width:30px;height:30px;flex:none;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;color:#fff;
+  }
+  h2{font-family:'Baloo 2',cursive;font-weight:700;font-size:19px}
+  .s1 .step{background:var(--teal)}
+  .s2 .step{background:var(--red)}
+  .s3 .step{background:var(--gold)}
+  .s4 .step{background:var(--orange)}
+
+  label{display:block;font-weight:800;font-size:13.5px;margin:14px 0 5px}
+  label .opt{font-weight:600;color:var(--muted)}
+  input[type=text],input[type=email],input[type=tel],textarea{
+    width:100%;
+    font:inherit;font-size:16px;
+    padding:12px 14px;
+    border:2px solid var(--line);
+    border-radius:12px;
+    background:#FFFDF9;
+    color:var(--ink);
+    transition:border-color .15s;
+  }
+  input:focus,textarea:focus{outline:none;border-color:var(--teal)}
+  input.invalid{border-color:var(--red)}
+  textarea{resize:vertical;min-height:74px}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .err{display:none;font-size:12.5px;color:var(--red-deep);font-weight:700;margin-top:4px}
+  .err.show{display:block}
+
+  .box-card{background:var(--tint-teal);border-radius:var(--radius);padding:18px}
+  .stepper{display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 14px}
+  .stepper button{
+    width:48px;height:48px;border:none;border-radius:14px;
+    background:#fff;color:var(--teal-deep);
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:26px;
+    cursor:pointer;box-shadow:0 2px 6px rgba(46,42,38,.12);
+    transition:transform .1s;
+  }
+  .stepper button:active{transform:scale(.93)}
+  .stepper button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  .stepper .count{
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:44px;
+    min-width:64px;text-align:center;color:var(--teal-deep);line-height:1;
+  }
+  .stepper .count small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:800;margin-top:2px}
+  .pills{display:flex;gap:8px}
+  .pill{flex:1;background:#fff;border-radius:14px;padding:10px 6px;text-align:center}
+  .pill b{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;display:block;line-height:1.15}
+  .pill span{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .pill.p-students b{color:var(--red)}
+  .pill.p-weeks b{color:var(--teal-deep)}
+  .pill.p-total b{color:var(--gold)}
+
+  .pay-card{background:var(--tint-gold);border-radius:var(--radius);padding:18px}
+  .pay-steps{list-style:none;margin-top:6px}
+  .pay-steps li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;margin-bottom:9px}
+  .pay-steps .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex:none;margin-top:7px}
+  .payline{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:#fff;border-radius:14px;padding:12px 14px;margin:12px 0 4px;
+  }
+  .payline .num{font-family:'Baloo 2',cursive;font-weight:800;font-size:19px;letter-spacing:.02em}
+  .payline .who{font-size:12px;color:var(--muted);font-weight:700}
+  .copy-btn{
+    border:none;background:var(--gold);color:#fff;
+    font:inherit;font-weight:800;font-size:13px;
+    padding:9px 14px;border-radius:10px;cursor:pointer;flex:none;
+  }
+  .copy-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .amount-due{text-align:center;font-weight:800;font-size:14px;margin-top:10px;color:var(--muted)}
+  .amount-due b{font-family:'Baloo 2',cursive;font-size:18px;color:var(--red);letter-spacing:.01em}
+
+  .code-card{background:var(--tint-orange);border-radius:var(--radius);padding:18px}
+  input.code{
+    text-transform:uppercase;letter-spacing:.18em;
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:20px;text-align:center;
+  }
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;border:none;border-radius:16px;
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:18px;
+    padding:15px 18px;cursor:pointer;color:#fff;text-decoration:none;
+    transition:transform .1s, filter .15s;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .btn-check{background:var(--red)}
+  .btn-check:hover{filter:brightness(1.05)}
+  .btn-check[disabled]{opacity:.6;cursor:wait}
+  .form-err{
+    display:none;text-align:center;font-weight:800;color:var(--red-deep);
+    font-size:14px;margin-top:10px;
+  }
+  .form-err.show{display:block}
+
+  .success{
+    display:none;
+    background:var(--tint-green);
+    border-radius:var(--radius);
+    padding:24px 20px;text-align:center;
+  }
+  .success.show{display:block}
+  .success .big{font-size:40px;line-height:1;margin-bottom:8px}
+  .success h3{font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;color:var(--green);margin-bottom:8px}
+  .success p{font-size:14.5px;margin-bottom:4px}
+  .success b{font-weight:800}
+
+  .foot{
+    text-align:center;font-size:13px;color:var(--muted);
+    margin-top:26px;padding-top:18px;border-top:2px dashed var(--line);
+  }
+  .foot b{color:var(--ink)}
+  .foot .thanks{font-family:'Baloo 2',cursive;font-weight:700;font-size:16px;color:var(--ink);display:block;margin-bottom:6px}
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);
+    background:var(--ink);color:#fff;font-weight:800;font-size:14px;
+    padding:11px 20px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:all .25s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="brandbar" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
+  <div class="inner">
+
+    <div class="logo">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADwAPADASIAAhEBAxEB/8QAHQABAAIDAQEBAQAAAAAAAAAAAAYHBAUIAwIBCf/EAEQQAAEDAwEFBAgDBAgGAwAAAAEAAgMEBREGBxIhMUETIlFhCBQycYGRobEjwdFCYoLSFRYXJHKS4fAzNENSU5NEc4P/xAAbAQEAAgMBAQAAAAAAAAAAAAAABAUBAwYCB//EADQRAAEDAgQCCAUEAwEAAAAAAAEAAgMEEQUSITFBUQYiYXGBkbHRExQyofAVQsHhIzNS8f/aAAwDAQACEQMRAD8A7LRERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERFH79q602pzonSGpqG/wDSh4kHzPIL01pcbALXLKyJuZ5sFIEVW3HX93nJFJHBSM6EDfd8zw+i002o77MSX3ar/hfuj6KU2ikO+iqpMbp2mzQSrrRUgy/Xphy27Vuf/uJWxodaX+mI3qplS0fszRg/UYKyaF42IXlmOwk9ZpCt5FCrLtAoZ3CO5QOpHHh2jTvM+PUfVSOovVFHEHxSifeGW9mcgj38lBqXClGaY2CtaaeOp/1G62SKM1F9q3nETWRD3ZKw33Ctee9VS/A4+yo5OkFM02aCfztVg2jed9FMkUMFbWA5FVN/nKyIbxXxnjKJB4PavLOkMBPWaQsmjeNipWi09HfoXkNqGGI/9w4tW2jeyRocxwc08iDkFW1PVw1IvG66jvjcz6gvpERSV4RERERERERERERERERERERERERfE0jIYnSyvaxjAXOc44AA6lfarLaNqN1ZUvtNJJ/donYmcD/xHjp7h9T7lthiMrrBRayrZSx53eC+dX6znrnvo7U98FLydKOD5fd4D6lQ5EVzHE2MWauLqKmSofmeUREWxaEX6ASQAMk8gF+La2ul3GCZ47zvZHgFX4liEdBAZX6ngOZUyho31cuRu3E8glDQ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M32Yo2sHuAx+S9kCLoBovj5JJuURERYREREREREREREREREX49oc0tcAQeBB6qtdTWl1qryGg+ryEmJ3h+77wrLWNc6GnuFG+mqGbzHcj1aehHmoNfRipjtxGynUFaaWS/A7qqEWwvdoqrVUbkwLoie5KBwd+h8lr1yEkbo3FrhYhdnFKyVocw3BREReFsQgEFpAIPAg9VXepLW62VxDQTTyEmJ3h+77wrEWPcaKCupH01Q3eY7kerT0I81kGymUNYaWS/A7qr0WfebVU2ycslG/ET+HKBwd+h8lgsa57g1jS4nkAtg12XXxyskbnabhGNc9wa0ZJ4ALd0kIghDOvNx8SvKgpBAN9+DIfostT4Icmp3UKebObDZERFJUdERetHTVFZUspqWF880hwxjBklAL6LDnBouTovykp5qupjpaaN0s0rgxjBzJKvjRliisFkjowQ+Y9+d4/aeefwHIe5arZ9o6OxReuVm7LcZG4JHFsQPNrfPxKl6t6Sn+GMzt1866QYyKx3wYj1B9z7IiIpi5pERERERERERERERERERERERERedRBFUQuimjbIxwwWuGQVE7vo7vOltswA59lIfsf1UwRR6ikiqBZ4Uinq5ac3jKqqtttfRkippJYwP2t3LfmOCxMjxCuDgseWhopTmSkgefExg/kqiTA9eo/wAwrmPHjbrs8iqnyPFekEM07wyCKSVx6MaT9laLLbbmHLaKlB8omrJjYyNu6xrWjwAwvDMCP7n/AGXp2Pi3VZ91X1Ho2suEZZcGMggd7TXjecR7v1WDedlTIGumsFQAccYag8T7nfkfmrRTKsosMgibYC55qKzHq2N+ZjrDlwXPN0sd3tjiK63VMIH7e5vNP8Q4LXZHiPmuljjGMcPcsOe02uckz26klJ6vgaT9lh2H/wDLldw9L3AWli8j/B91zrkeI+a9qSlqauQR0lPNUPPIRsLj9Ff8dissZyy00LT4inb+iz4YooW7kUbWN8GtwPovLcPPFy9ydMBbqRa9p/pU9YdnV6rnNfXltvh5ne70hHk0cB8SrM01pu12GAsoYPxHDD5n8ZH+8+HkOC3HD/YRTIqdkWo3XO1+M1Vd1ZDZvIbf34oiIt6qkREREREREREREREREREREREREWl1XqSi09TRy1LJJXykhkceMnHM8eQ5fNbokAElUjqK4wag1k6WeqMF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" alt="ArtBox logo">
+      <div class="tag">A school<br>art programme</div>
+    </div>
+
+    <div id="form-area">
+      <span class="badge">Sponsor an ArtBox</span>
+      <h1>Give <em>50 kids</em> a term of creativity.</h1>
+      <p class="lede">One ArtBox is <strong>KSh 10,000</strong> — a full Art Club kit for 50 students, 10 weeks, everything included.</p>
+
+      <!-- 1 · Your details -->
+      <section class="s1">
+        <div class="sec-head"><span class="step">1</span><h2>Your details</h2></div>
+        <label for="f-name">Full name</label>
+        <input type="text" id="f-name" autocomplete="name">
+        <p class="err" id="e-name">Please add your name so we know who to thank.</p>
+
+        <label for="f-org">Organisation <span class="opt">(optional)</span></label>
+        <input type="text" id="f-org" autocomplete="organization">
+
+        <label for="f-phone">Phone number</label>
+        <input type="tel" id="f-phone" autocomplete="tel" inputmode="tel" placeholder="07XX XXX XXX">
+        <p class="err" id="e-phone">Add a phone number we can reach you on.</p>
+
+        <label for="f-email">Email</label>
+        <input type="email" id="f-email" autocomplete="email" placeholder="you@example.com">
+        <p class="hint">We'll send a copy of your sponsorship to this address.</p>
+        <p class="err" id="e-email">We need a valid email to send your sponsorship copy to.</p>
+      </section>
+
+      <!-- 2 · How many boxes -->
+      <section class="s2">
+        <div class="sec-head"><span class="step">2</span><h2>How many ArtBoxes?</h2></div>
+        <div class="box-card">
+          <div class="stepper">
+            <button type="button" id="minus" aria-label="One less ArtBox">−</button>
+            <div class="count" aria-live="polite"><span id="box-count">1</span><small id="box-word">ArtBox</small></div>
+            <button type="button" id="plus" aria-label="One more ArtBox">+</button>
+          </div>
+          <div class="pills">
+            <div class="pill p-students"><b id="p-students">50</b><span>Students</span></div>
+            <div class="pill p-weeks"><b>10</b><span>Weeks</span></div>
+            <div class="pill p-total"><b id="p-total">KSh 10,000</b><span>Total</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 · Pay -->
+      <section class="s3">
+        <div class="sec-head"><span class="step">3</span><h2>Pay by M-PESA</h2></div>
+        <div class="pay-card">
+          <ul class="pay-steps">
+            <li><span class="dot"></span><span>Open M-PESA and choose <b>Send Money</b></span></li>
+            <li><span class="dot"></span><span>Send your total to the number below</span></li>
+            <li><span class="dot"></span><span>Keep the confirmation SMS — you'll need the code in step 4</span></li>
+          </ul>
+          <div class="payline">
+            <div>
+              <div class="num">0714 435 756</div>
+              <div class="who">Nimo Kanina · ArtBox</div>
+            </div>
+            <button type="button" class="copy-btn" id="copy-num">Copy</button>
+          </div>
+          <p class="amount-due">Amount to send: <b id="amount-due">KSh 10,000</b></p>
+        </div>
+      </section>
+
+      <!-- 4 · Proof of payment -->
+      <section class="s4">
+        <div class="sec-head"><span class="step">4</span><h2>Proof of payment</h2></div>
+        <div class="code-card">
+          <label for="f-code" style="margin-top:0">M-PESA confirmation code</label>
+          <input type="text" id="f-code" class="code" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="12" placeholder="e.g. TGL4X8M2QP">
+          <p class="hint">The 10-character code from your M-PESA confirmation SMS.</p>
+          <p class="err" id="e-code">Enter the confirmation code from your M-PESA SMS (letters and numbers only).</p>
+
+          <label for="f-msg">A message for the kids <span class="opt">(optional)</span></label>
+          <textarea id="f-msg" placeholder="A word of encouragement, or tell us if you'd like to sponsor a particular school…"></textarea>
+        </div>
+      </section>
+
+      <button type="button" class="btn btn-check" id="check-btn">Confirm my sponsorship</button>
+      <p class="form-err" id="form-err">A few details are missing — check the highlighted fields above.</p>
+    </div>
+
+    <div class="success" id="success" role="status">
+      <div class="big">🎨</div>
+      <h3>Asante sana!</h3>
+      <p><b id="ok-name"></b>, your sponsorship of <b id="ok-boxes"></b> is recorded.</p>
+      <p>A confirmation email is on its way to <b id="ok-email"></b>.</p>
+      <p style="margin-top:10px;color:var(--muted)">The ArtBox team will confirm your M-PESA payment. If you requested a particular school in your message, we'll be in touch to make that happen.</p>
+    </div>
+
+    <p class="foot">
+      <span class="thanks">Every ArtBox gives 50 young people the chance to create.</span>
+      <b>Jeremy — ArtBox</b> · <a href="mailto:artboxprogramme@gmail.com" style="color:inherit">artboxprogramme@gmail.com</a><br>
+      <b>Nimo Kanina</b> · <a href="mailto:nimo.kanina@gmail.com" style="color:inherit">nimo.kanina@gmail.com</a> · +254 714 435 756
+    </p>
+  </div>
+  <div class="brandbar" aria-hidden="true"><span class="b4"></span><span class="b3"></span><span class="b2"></span><span class="b1"></span></div>
+</div>
+
+<div class="toast" id="toast">Number copied</div>
+
+<script>
+(function(){
+  /* ================= CONFIG =================
+     Paste your Google Apps Script Web App URL
+     between the quotes below (see setup guide).
+     While it is empty, the form falls back to
+     opening an email to the ArtBox team.      */
+  var SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7ZcwFnYzz5TA3tBMYfx0_27sdkEFj8KQAOBVlb8pmbDQTlnqAJmJj2kRtj-eVXeOc/exec";
+  /* ========================================== */
+
+  var PRICE = 10000;
+  var STUDENTS = 50;
+  var PAY_NUMBER = "0714435756";
+  var MAIL_TO = "artboxprogramme@gmail.com";
+  var MAIL_CC = "nimo.kanina@gmail.com";
+
+  var boxes = 1;
+
+  function fmt(n){ return "KSh " + n.toLocaleString("en-KE"); }
+
+  function render(){
+    document.getElementById("box-count").textContent = boxes;
+    document.getElementById("box-word").textContent = boxes === 1 ? "ArtBox" : "ArtBoxes";
+    document.getElementById("p-students").textContent = (boxes * STUDENTS).toLocaleString("en-KE");
+    document.getElementById("p-total").textContent = fmt(boxes * PRICE);
+    document.getElementById("amount-due").textContent = fmt(boxes * PRICE);
+  }
+
+  document.getElementById("plus").addEventListener("click", function(){ if(boxes < 99){ boxes++; render(); } });
+  document.getElementById("minus").addEventListener("click", function(){ if(boxes > 1){ boxes--; render(); } });
+
+  document.getElementById("copy-num").addEventListener("click", function(){
+    var done = function(){
+      var t = document.getElementById("toast");
+      t.classList.add("show");
+      setTimeout(function(){ t.classList.remove("show"); }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(PAY_NUMBER).then(done, done);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = PAY_NUMBER;
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(ta); done();
+    }
+  });
+
+  var codeInput = document.getElementById("f-code");
+  codeInput.addEventListener("input", function(){
+    this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  });
+
+  function setErr(inputId, errId, bad){
+    document.getElementById(inputId).classList.toggle("invalid", bad);
+    document.getElementById(errId).classList.toggle("show", bad);
+    return !bad;
+  }
+
+  function validate(){
+    var ok = true;
+    var name  = document.getElementById("f-name").value.trim();
+    var phone = document.getElementById("f-phone").value.trim();
+    var email = document.getElementById("f-email").value.trim();
+    var code  = codeInput.value.trim();
+
+    ok = setErr("f-name","e-name", name.length < 2) && ok;
+    ok = setErr("f-phone","e-phone", phone.replace(/\D/g,"").length < 9) && ok;
+    ok = setErr("f-email","e-email", !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) && ok;
+    ok = setErr("f-code","e-code", !/^[A-Z0-9]{8,12}$/.test(code)) && ok;
+    return ok;
+  }
+
+  function collect(){
+    return {
+      name:  document.getElementById("f-name").value.trim(),
+      org:   document.getElementById("f-org").value.trim(),
+      phone: document.getElementById("f-phone").value.trim(),
+      email: document.getElementById("f-email").value.trim(),
+      boxes: boxes,
+      total: boxes * PRICE,
+      code:  codeInput.value.trim(),
+      msg:   document.getElementById("f-msg").value.trim()
+    };
+  }
+
+  function showSuccess(d){
+    document.getElementById("ok-name").textContent  = d.name;
+    document.getElementById("ok-boxes").textContent = d.boxes + (d.boxes === 1 ? " ArtBox" : " ArtBoxes") + " (" + fmt(d.total) + ")";
+    document.getElementById("ok-email").textContent = d.email;
+    document.getElementById("form-area").style.display = "none";
+    document.getElementById("success").classList.add("show");
+    document.getElementById("success").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+
+  function mailtoFallback(d){
+    var lines = [
+      "ArtBox Sponsorship",
+      "",
+      "Name: " + d.name,
+      d.org ? "Organisation: " + d.org : null,
+      "Phone: " + d.phone,
+      "Email: " + d.email,
+      "",
+      "ArtBoxes: " + d.boxes,
+      "Total paid: " + fmt(d.total),
+      "M-PESA code: " + d.code,
+      d.msg ? "" : null,
+      d.msg ? "Message: " + d.msg : null
+    ].filter(function(l){ return l !== null; }).join("\n");
+    window.location.href = "mailto:" + MAIL_TO + "?cc=" + MAIL_CC +
+      "&subject=" + encodeURIComponent("ArtBox Sponsorship — " + d.name) +
+      "&body=" + encodeURIComponent(lines);
+  }
+
+  document.getElementById("check-btn").addEventListener("click", function(){
+    var btn = this;
+    var formErr = document.getElementById("form-err");
+    if (!validate()){
+      formErr.classList.add("show");
+      var firstBad = document.querySelector("input.invalid");
+      if (firstBad) firstBad.focus();
+      return;
+    }
+    formErr.classList.remove("show");
+    var d = collect();
+
+    if (!SCRIPT_URL){
+      // No backend configured yet — open an email to the team instead.
+      mailtoFallback(d);
+      showSuccess(d);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",          // fire-and-forget: we can't read the reply, but the script runs
+      body: JSON.stringify(d)
+    })
+    .then(function(){ showSuccess(d); })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = "Confirm my sponsorship";
+      formErr.textContent = "Couldn't send just now — check your connection and try again, or email us directly at " + MAIL_TO + ".";
+      formErr.classList.add("show");
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArtBox — A School Art Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E85D4A;
+    --red-deep: #D64A37;
+    --teal: #3BAFC0;
+    --teal-deep: #2E96A6;
+    --gold: #C99A3C;
+    --orange: #F0924C;
+    --green: #3E9E5C;
+    --ink: #2E2A26;
+    --muted: #7A736B;
+    --cream: #FAF5EC;
+    --card: #FFFFFF;
+    --tint-red: #FCEBE7;
+    --tint-teal: #E6F4F6;
+    --tint-gold: #F9F1DE;
+    --tint-orange: #FCEFE2;
+    --line: #EFE7DA;
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* ── BRAND BAR ── */
+  .brandbar { display: flex; height: 8px; }
+  .brandbar span { flex: 1; }
+  .brandbar .b1 { background: var(--red); }
+  .brandbar .b2 { background: var(--orange); }
+  .brandbar .b3 { background: var(--gold); }
+  .brandbar .b4 { background: var(--teal); }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--card);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(70,50,30,.08);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
+  .nav-logo span {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--ink);
+  }
+  .nav-cta {
+    display: inline-block;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    background: var(--red);
+    padding: 9px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: filter .15s;
+  }
+  .nav-cta:hover { filter: brightness(1.08); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 540px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(46,42,38,.78) 0%, rgba(46,42,38,.35) 55%, transparent 100%);
+  }
+  .hero-content {
+    position: relative;
+    max-width: 560px;
+    padding: 64px 28px;
+    color: #fff;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 5px 14px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: clamp(30px, 6.5vw, 50px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.25);
+  }
+  .hero h1 em { font-style: normal; color: #FFD97D; }
+  .hero p {
+    font-size: 17px;
+    line-height: 1.55;
+    opacity: .92;
+    margin-bottom: 30px;
+    max-width: 420px;
+    text-shadow: 0 1px 4px rgba(0,0,0,.2);
+  }
+  .btn-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 17px;
+    color: #fff;
+    background: var(--red);
+    padding: 14px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform .1s, filter .15s;
+    box-shadow: 0 4px 18px rgba(232,93,74,.45);
+  }
+  .btn-hero:hover { filter: brightness(1.08); }
+  .btn-hero:active { transform: scale(.97); }
+
+  /* ── SHARED LAYOUT ── */
+  .section { padding: 64px 24px; }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: clamp(24px, 5vw, 36px);
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  h2 em { font-style: normal; color: var(--red); }
+
+  /* ── STORY ── */
+  .story { background: var(--card); }
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .story-text p {
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-size: 15.5px;
+  }
+  .story-text p:last-child { margin-bottom: 0; }
+  .story-text strong { color: var(--ink); font-weight: 800; }
+  .story-quote {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--teal-deep);
+    background: var(--tint-teal);
+    border-left: 4px solid var(--teal);
+    padding: 16px 18px;
+    border-radius: 0 12px 12px 0;
+    margin: 20px 0;
+    line-height: 1.45;
+  }
+  .story-sig {
+    margin-top: 18px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .story-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .story-photos img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  .story-photos img:first-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* ── STATS ── */
+  .stats { background: var(--cream); }
+  .stats-intro {
+    max-width: 640px;
+    color: var(--muted);
+    font-size: 15.5px;
+    margin-bottom: 36px;
+    line-height: 1.65;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 0;
+  }
+  .stat-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px 16px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(70,50,30,.06);
+  }
+  .stat-card .num {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .stat-card .lbl {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat-card:nth-child(1) .num { color: var(--red); }
+  .stat-card:nth-child(2) .num { color: var(--teal-deep); }
+  .stat-card:nth-child(3) .num { color: var(--orange); }
+  .stat-card:nth-child(4) .num { color: var(--gold); }
+
+  /* ── INSIDE THE BOX ── */
+  .inside { background: var(--card); }
+  .inside-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .inside-photos img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  .box-categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .box-cat {
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .box-cat:nth-child(1) { background: var(--tint-teal); }
+  .box-cat:nth-child(2) { background: var(--tint-red); }
+  .box-cat:nth-child(3) { background: var(--tint-orange); }
+  .box-cat:nth-child(4) { background: var(--tint-gold); }
+  .box-cat h3 {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .box-cat ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .box-cat ul li {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .box-cat ul li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .box-cat:nth-child(1) ul li::before { background: var(--teal); }
+  .box-cat:nth-child(2) ul li::before { background: var(--red); }
+  .box-cat:nth-child(3) ul li::before { background: var(--orange); }
+  .box-cat:nth-child(4) ul li::before { background: var(--gold); }
+
+  /* ── SPONSOR CTA ── */
+  .sponsor-cta {
+    background: var(--ink);
+    color: #fff;
+    text-align: center;
+  }
+  .sponsor-cta .section-label { color: var(--gold); }
+  .sponsor-cta h2 { color: #fff; }
+  .sponsor-cta h2 em { color: #FFD97D; }
+  .price-card {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 24px;
+    padding: 36px 32px;
+    max-width: 460px;
+    margin: 32px auto 0;
+  }
+  .price-big {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 48px;
+    color: #FFD97D;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .price-sub {
+    font-size: 14px;
+    opacity: .65;
+    margin-bottom: 28px;
+  }
+  .price-checks {
+    list-style: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .price-checks li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .price-checks li::before {
+    content: '✓';
+    font-weight: 800;
+    color: var(--gold);
+    font-size: 16px;
+    flex: none;
+  }
+  .btn-sponsor {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    background: #FFD97D;
+    padding: 15px 36px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform .1s, filter .15s;
+    box-shadow: 0 4px 20px rgba(201,154,60,.35);
+  }
+  .btn-sponsor:hover { filter: brightness(1.06); }
+  .btn-sponsor:active { transform: scale(.97); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--card);
+    padding: 28px 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 2px dashed var(--line);
+  }
+  footer .thanks {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 6px;
+  }
+  footer a { color: inherit; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    nav { padding: 12px 16px; }
+    .section { padding: 44px 16px; }
+    .hero-content { padding: 52px 20px; }
+    .story-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .inside-photos { grid-template-columns: 1fr; }
+    .box-categories { grid-template-columns: 1fr; }
+    .price-card { padding: 24px 20px; }
+    .price-big { font-size: 38px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brandbar" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="images/logo.jpg" alt="ArtBox logo">
+    <span>ArtBox</span>
+  </a>
+  <a href="sponsor.html" class="nav-cta">Sponsor an ArtBox →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="hero-img" src="images/kidnofaces.jpeg" alt="Art class at Mother Margherita School">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">A School Art Programme</div>
+    <h1>Every child deserves<br>a chance to <em>create.</em></h1>
+    <p>ArtBox puts a complete art kit into schools that can't afford one — giving 50 students a full term of creative expression for KSh 10,000.</p>
+    <a href="sponsor.html" class="btn-hero">Sponsor an ArtBox →</a>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="story section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-text">
+        <p class="section-label">My ArtBox Story</p>
+        <h2>How it <em>started</em></h2>
+        <p>Last year I had the opportunity to volunteer as an art teacher at Mother Margherita School in Kawangware. When I signed up, I thought I would simply be teaching children how to draw and paint. I didn't expect the experience to change the way I think about art.</p>
+        <p>Every week I met children who were full of ideas and excited to create. They didn't lack imagination. <strong>What they often lacked were the basic materials that make art possible.</strong> That stayed with me.</p>
+        <div class="story-quote">"What if every school had a box with everything needed to make art possible?"</div>
+        <p>That question became the beginning of ArtBox — art supplies, easy-to-follow activity ideas and creative projects that make it easier for children to explore, create and express themselves.</p>
+        <p>My hope is that this is just the beginning. If ArtBox can help more children discover the joy of creating, it will have been worth it.</p>
+        <p class="story-sig">— Jeremy Kieme, founder</p>
+      </div>
+      <div class="story-photos">
+        <img src="images/painting-hand-tree.jpg" alt="Jeremy painting the hand tree with the kids">
+        <img src="images/jeremy-hand-tree.jpg" alt="Jeremy in front of the completed hand tree">
+        <img src="images/painting-mural.jpg" alt="Jeremy painting the mural">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMME OVERVIEW -->
+<section class="stats section">
+  <div class="container">
+    <p class="section-label">Programme Overview</p>
+    <h2>What is an <em>ArtBox?</em></h2>
+    <p class="stats-intro">ArtBox is a complete resource kit that lets a school run an Art Club without sourcing a single material. Each box arrives packed and ready for immediate use — everything needed to run weekly art sessions for 50 students across one full school term. Alongside the supplies, every box carries ten weeks of art activities and a teacher facilitation guide, so any teacher can lead a session with confidence.</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">50</div>
+        <div class="lbl">Students per box</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">10</div>
+        <div class="lbl">Weeks of art</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">4–9</div>
+        <div class="lbl">Grade levels</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">KSh<br>10K</div>
+        <div class="lbl">Per box · per term</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIDE THE BOX -->
+<section class="inside section">
+  <div class="container">
+    <p class="section-label">Inside Every Box</p>
+    <h2>Everything they need to <em>create</em></h2>
+    <div class="inside-photos">
+      <img src="images/artbox.jpeg" alt="ArtBox №1 delivered to Mother Margherita School">
+      <img src="images/finished-mural.jpg" alt="The finished mural at Mother Margherita School">
+    </div>
+    <div class="box-categories">
+      <div class="box-cat">
+        <h3>Drawing & Sketching</h3>
+        <ul>
+          <li>Drawing paper</li>
+          <li>Sketchbooks</li>
+          <li>HB pencils</li>
+          <li>Colour pencils</li>
+          <li>Erasers & sharpeners</li>
+        </ul>
+      </div>
+      <div class="box-cat">
+        <h3>Painting</h3>
+        <ul>
+          <li>Powder paints</li>
+          <li>Paint brushes</li>
+          <li>Paint palettes</li>
+          <li>Water containers</li>
+          <li>Mixing bottles</li>
+        </ul>
+      </div>
+      <div class="box-cat">
+        <h3>Creative Making</h3>
+        <ul>
+          <li>Scissors</li>
+          <li>Glue & masking tape</li>
+          <li>Markers</li>
+          <li>Modelling clay</li>
+          <li>Craft materials</li>
+        </ul>
+      </div>
+      <div class="box-cat">
+        <h3>Programme Resources</h3>
+        <ul>
+          <li>Ten weekly art activities</li>
+          <li>Teacher facilitation guide</li>
+          <li>Ready to run — nothing to source</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR CTA -->
+<section class="sponsor-cta section">
+  <div class="container">
+    <p class="section-label">Sponsor an ArtBox</p>
+    <h2>Give <em>50 kids</em> a term of creativity.</h2>
+    <div class="price-card">
+      <div class="price-big">KSh 10,000</div>
+      <div class="price-sub">sponsors one ArtBox</div>
+      <ul class="price-checks">
+        <li>Art Club for 50 students</li>
+        <li>One full school term — 10 weeks</li>
+        <li>About KSh 20 per student, per week</li>
+      </ul>
+      <a href="sponsor.html" class="btn-sponsor">Sponsor an ArtBox →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="thanks">Every ArtBox gives 50 young people the chance to create.</span>
+  <b>Jeremy — ArtBox</b> · <a href="mailto:artboxprogramme@gmail.com">artboxprogramme@gmail.com</a><br>
+  <b>Nimo Kanina</b> · <a href="mailto:nimo.kanina@gmail.com">nimo.kanina@gmail.com</a> · +254 714 435 756
+</footer>
+
+<div class="brandbar" aria-hidden="true"><span class="b4"></span><span class="b3"></span><span class="b2"></span><span class="b1"></span></div>
+
+</body>
+</html>
