@@ -246,7 +246,10 @@
 
   function showEmpty() {
     document.getElementById("loading-state").style.display = "none";
-    document.getElementById("gallery-root").innerHTML = ‘<div class="empty">Every piece that lands here started the same way ➡️ a child, a box of supplies, and the freedom to create. The gallery is empty for now. That’s about to change.</div>’;
+    var el = document.createElement("div");
+    el.className = "empty";
+    el.textContent = "Every piece that lands here started the same way ➡️ a child, a box of supplies, and the freedom to create. The gallery is empty for now. That’s about to change.";
+    document.getElementById("gallery-root").appendChild(el);
   }
 
   function render(rows) {
