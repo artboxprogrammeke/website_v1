@@ -178,9 +178,18 @@ function handleGalleryUpload(e, meta) {
   var b64   = e.parameters.photo[0];
   var bytes = Utilities.base64Decode(b64);
   var blob  = Utilities.newBlob(bytes, "image/jpeg", buildFilename(schoolSlug, childName, childAge));
-  var file  = schoolFolder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  var file   = schoolFolder.createFile(blob);
   var fileId = file.getId();
+  UrlFetchApp.fetch(
+    "https://www.googleapis.com/drive/v3/files/" + fileId + "/permissions",
+    {
+      method: "post",
+      contentType: "application/json",
+      headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+      payload: JSON.stringify({ role: "reader", type: "anyone" }),
+      muteHttpExceptions: true
+    }
+  );
 
   // Log one row per child to Gallery Submissions sheet
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
