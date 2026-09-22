@@ -217,7 +217,10 @@
 
 <div class="gallery-section">
   <div class="container">
-    <div id="gallery-root"><div class="empty">Every piece that lands here started the same way ➡️ a child, a box of supplies, and the freedom to create. The gallery is empty for now. That’s about to change.</div></div>
+    <div class="loading" id="loading-state">
+      <div class="spinner" role="status" aria-label="Loading gallery"></div>
+    </div>
+    <div id="gallery-root"></div>
   </div>
 </div>
 
@@ -241,8 +244,14 @@
       .replace(/"/g, "&quot;");
   }
 
+  function showEmpty() {
+    document.getElementById("loading-state").style.display = "none";
+    document.getElementById("gallery-root").innerHTML = ‘<div class="empty">Every piece that lands here started the same way ➡️ a child, a box of supplies, and the freedom to create. The gallery is empty for now. That’s about to change.</div>’;
+  }
+
   function render(rows) {
-    if (!rows || rows.length === 0) { return; }
+    document.getElementById("loading-state").style.display = "none";
+    if (!rows || rows.length === 0) { showEmpty(); return; }
     var root = document.getElementById("gallery-root");
 
     // Group by school, newest first within each group
@@ -287,12 +296,16 @@
     root.innerHTML = html;
   }
 
+  var deadline = setTimeout(showEmpty, 8000);
+
   fetch(SHEET_URL)
     .then(function (res) { return res.json(); })
     .then(function (json) {
+      clearTimeout(deadline);
       if (json && json.ok) { render(json.rows); }
+      else { showEmpty(); }
     })
-    .catch(function () {});
+    .catch(function () { clearTimeout(deadline); showEmpty(); });
 })();
 </script>
 </body>
