@@ -11,7 +11,38 @@ var NOTIFY_TO = "artboxprogramme@gmail.com";
 var NOTIFY_CC = "nimo.kanina@gmail.com";
 var SHEET_NAME = "Sponsorships";
 
+var GALLERY_FOLDER_ID  = "1CYqGeseRF06Ooe3vPAhV7c1dmRPKqjxQ";
+var GALLERY_SHEET_NAME = "Gallery Submissions";
+
+function doGet(e) {
+  try {
+    if (e.parameter && e.parameter.formType === "gallery") {
+      return handleGalleryRead();
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: "Unknown request" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 function doPost(e) {
+  // Gallery uploads arrive as application/x-www-form-urlencoded
+  // with a `meta` field — route them before the sponsorship JSON parse
+  if (e.parameters && e.parameters.meta) {
+    try {
+      var meta = JSON.parse(e.parameters.meta[0]);
+      return handleGalleryUpload(e, meta);
+    } catch (err) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
   try {
     var d = JSON.parse(e.postData.contents);
 
@@ -115,4 +146,119 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// ─── GALLERY UPLOAD ───────────────────────────────────────────────────────────
+
+function handleGalleryUpload(e, meta) {
+  var school        = (meta.school        || "").trim();
+  var submitterName = (meta.submitterName || "").trim();
+  var submitterPos  = (meta.submitterPos  || "").trim();
+  var childName     = (meta.childName     || "").trim();
+  var childAge      = (meta.childAge      || "").toString().trim();
+  var childDesc     = (meta.childDesc     || "").trim();
+
+  if (!school || !childName) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: "Missing required fields" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (!e.parameters || !e.parameters.photo) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: "No photo received" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Save photo to Drive
+  var rootFolder   = DriveApp.getFolderById(GALLERY_FOLDER_ID);
+  var schoolSlug   = slugify(school);
+  var schoolFolder = getOrCreateFolder(rootFolder, schoolSlug);
+
+  var b64   = e.parameters.photo[0];
+  var bytes = Utilities.base64Decode(b64);
+  var blob  = Utilities.newBlob(bytes, "image/jpeg", buildFilename(schoolSlug, childName, childAge));
+  var file  = schoolFolder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  var fileId = file.getId();
+
+  // Log one row per child to Gallery Submissions sheet
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(GALLERY_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(GALLERY_SHEET_NAME);
+    sheet.appendRow([
+      "Timestamp", "School", "Submitted By Name", "Submitted By Position",
+      "Child First Name", "Age", "Description", "Drive File ID"
+    ]);
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(), school, submitterName, submitterPos,
+    childName, childAge, childDesc, fileId
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true, fileId: fileId }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ─── GALLERY READ ─────────────────────────────────────────────────────────────
+
+function handleGalleryRead() {
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(GALLERY_SHEET_NAME);
+
+  if (!sheet || sheet.getLastRow() < 2) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, rows: [] }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var data = sheet.getRange(2, 1, sheet.getLastRow() - 1, 8).getValues();
+  var rows = [];
+  data.forEach(function (row) {
+    var fileId = (row[7] || "").toString().trim();
+    if (!fileId) return;
+    rows.push({
+      timestamp:   row[0] ? new Date(row[0]).toISOString() : "",
+      school:      row[1] || "",
+      childName:   row[4] || "",
+      age:         row[5] ? row[5].toString() : "",
+      description: row[6] || "",
+      fileId:      fileId
+    });
+  });
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true, rows: rows }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+function getOrCreateFolder(parent, name) {
+  var iter = parent.getFoldersByName(name);
+  if (iter.hasNext()) return iter.next();
+  return parent.createFolder(name);
+}
+
+function slugify(str) {
+  return str.trim()
+            .replace(/[^a-zA-Z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+}
+
+function buildFilename(schoolSlug, childName, age) {
+  var now = new Date();
+  var pad = function (n) { return n < 10 ? "0" + n : String(n); };
+  var stamp = now.getFullYear() +
+              pad(now.getMonth() + 1) +
+              pad(now.getDate()) + "-" +
+              pad(now.getHours()) +
+              pad(now.getMinutes()) +
+              pad(now.getSeconds());
+  return schoolSlug + "_" + childName.replace(/[^a-zA-Z]/g, "") + "_" + age + "_" + stamp + ".jpg";
 }
