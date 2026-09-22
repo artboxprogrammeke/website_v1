@@ -58,11 +58,23 @@
   }
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .nav-logo img { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
-  .nav-logo span { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 20px; color: var(--ink); }
+  .nav-logo span { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 26px; color: var(--ink); }
   .nav-links { display: flex; align-items: center; gap: 20px; }
   .nav-link { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; transition: color .15s; }
   .nav-link:hover { color: var(--teal-deep); }
   .nav-link.active { color: var(--teal-deep); border-bottom: 2px solid var(--teal); padding-bottom: 2px; }
+  .nav-gallery, .nav-gallery.active {
+    background: linear-gradient(90deg, var(--red) 0%, var(--orange) 33%, var(--gold) 66%, var(--teal) 100%);
+    color: #fff !important;
+    padding: 7px 14px;
+    border-radius: 10px;
+    border-bottom: none;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0,0,0,.18);
+    transition: filter .15s;
+  }
+  .nav-gallery:hover { filter: brightness(1.08); color: #fff !important; }
   .nav-cta { display: inline-block; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 15px; color: #fff; background: var(--red); padding: 9px 20px; border-radius: 12px; text-decoration: none; transition: filter .15s; }
   .nav-cta:hover { filter: brightness(1.08); }
 
@@ -185,7 +197,7 @@
     <span>ArtBox</span>
   </a>
   <div class="nav-links">
-    <a href="gallery.html" class="nav-link active">Gallery</a>
+    <a href="gallery.html" class="nav-link active nav-gallery">Gallery</a>
     <a href="sponsor.html" class="nav-cta">Sponsor an ArtBox →</a>
   </div>
 </nav>
